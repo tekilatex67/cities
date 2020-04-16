@@ -18,15 +18,22 @@ function displayMatches(e) {
     let matches = findMatches(this.value, cities);
 
     let html = matches.map(place => {
-        return `
-                    <li >
-                        <span class="city">${place.city}, ${place.state}</span>
-                        <span class="population">${place.population}</span>
+        let regex = new RegExp(this.value, ('gi'));
+        let cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
+        let stateName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
+
+        return `    <li >
+                        <span class="city" >${cityName}, ${stateName}</span> 
+                        <span class="population">${numberWithCommas(place.population)}</span> 
                     </li>
-                    `
+                `
     }).join('');
 
     suggestions.innerHTML = html;
 };
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
 
 search.addEventListener('input', displayMatches);
